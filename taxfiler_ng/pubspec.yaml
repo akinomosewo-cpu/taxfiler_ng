@@ -1,0 +1,56 @@
+name: taxfiler_ng
+description: Nigerian freelancer tax self-assessment and filing assistant.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^8.1.4
+  bloc: ^8.1.4
+  equatable: ^2.0.5
+  get_it: ^7.6.7
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  shared_preferences: ^2.2.2
+  dio: ^5.4.3
+  dartz: ^0.10.1
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
+  intl: ^0.19.0
+  uuid: ^4.3.3
+  logger: ^2.0.2+1
+  fl_chart: ^0.67.0
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  file_picker: ^8.0.3
+  open_filex: ^4.3.4
+  flutter_svg: ^2.0.10+1
+  shimmer: ^3.0.0
+  lottie: ^3.1.0
+  google_fonts: ^6.2.1
+  flutter_animate: ^4.5.0
+  gap: ^3.0.1
+  iconsax: ^0.0.8
+  permission_handler: ^11.3.1
+  url_launcher: ^6.2.5
+  currency_text_input_formatter: ^2.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+  build_runner: ^2.4.9
+  hive_generator: ^2.0.1
+  freezed: ^2.5.2
+  json_serializable: ^6.7.1
+  mocktail: ^1.0.3
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/icons/
