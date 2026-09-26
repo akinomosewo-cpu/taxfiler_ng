@@ -40,27 +40,50 @@ class AssessmentPage extends StatelessWidget {
                 // Hero result
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(28),
                   decoration: BoxDecoration(
                     gradient: a.isNilReturn ? AppColors.primaryGradient : AppColors.dangerGradient,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(28),
+                    boxShadow: [
+                      BoxShadow(
+                        color: (a.isNilReturn ? AppColors.primary : AppColors.danger).withValues(alpha: 0.28),
+                        blurRadius: 28,
+                        offset: const Offset(0, 14),
+                        spreadRadius: -8,
+                      ),
+                    ],
                   ),
                   child: Column(
                     children: [
-                      Icon(a.isNilReturn ? Icons.check_circle_rounded : Icons.receipt_long_rounded, color: Colors.white, size: 36),
-                      const Gap(12),
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.18),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(a.isNilReturn ? Icons.check_circle_rounded : Icons.receipt_long_rounded, color: Colors.white, size: 32),
+                      ),
+                      const Gap(16),
                       Text(a.isNilReturn ? 'NIL RETURN' : '₦${fmt.format(a.taxLiability)}',
-                          style: AppTextStyles.displayMedium.copyWith(color: Colors.white, fontWeight: FontWeight.w800)),
+                          style: AppTextStyles.displayLarge.copyWith(color: Colors.white, fontWeight: FontWeight.w800)),
+                      const Gap(4),
                       Text(a.isNilReturn ? 'No tax owed for ${a.year.label}' : 'Tax due for ${a.year.label}',
-                          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.85))),
-                      const Gap(8),
-                      Text('Effective rate: ${a.effectiveTaxRate.toStringAsFixed(1)}%',
-                          style: AppTextStyles.labelMedium.copyWith(color: Colors.white.withValues(alpha: 0.7))),
+                          style: AppTextStyles.bodyMedium.copyWith(color: Colors.white.withValues(alpha: 0.9))),
+                      const Gap(12),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.18),
+                          borderRadius: BorderRadius.circular(999),
+                        ),
+                        child: Text('Effective rate: ${a.effectiveTaxRate.toStringAsFixed(1)}%',
+                            style: AppTextStyles.labelMedium.copyWith(color: Colors.white)),
+                      ),
                     ],
                   ),
                 ),
 
-                const Gap(24),
+                const Gap(28),
 
                 _Section(title: 'Income Summary', rows: [
                   ('Gross Income', '₦${fmt.format(a.grossIncome)}'),
@@ -86,17 +109,17 @@ class AssessmentPage extends StatelessWidget {
 
                 const Gap(12),
 
-                Text('Band Breakdown', style: AppTextStyles.headlineSmall.copyWith(color: AppColors.textPrimary)),
-                const Gap(8),
+                Text('Band Breakdown', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
+                const Gap(10),
 
                 ...a.bandBreakdown.map((b) => Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: const EdgeInsets.only(bottom: 10),
                   child: Container(
-                    padding: const EdgeInsets.all(14),
+                    padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: AppColors.surface,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: AppColors.border),
+                      borderRadius: BorderRadius.circular(18),
+                      boxShadow: AppColors.cardShadow,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,14 +165,14 @@ class _Section extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppTextStyles.headlineSmall.copyWith(color: AppColors.textPrimary)),
-        const Gap(8),
+        Text(title, style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
+        const Gap(10),
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.border),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: AppColors.cardShadow,
           ),
           child: Column(
             children: rows.asMap().entries.map((e) => Column(
