@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/theme/app_theme.dart';
 import 'core/constants/app_constants.dart';
 import 'presentation/blocs/tax_bloc.dart';
-import 'presentation/pages/dashboard_page.dart';
+import 'presentation/pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,7 +31,7 @@ class TaxFilerApp extends StatelessWidget {
         theme: AppTheme.dark,
         darkTheme: AppTheme.dark,
         themeMode: ThemeMode.light,
-        home: const DashboardPage(),
+        home: const SplashPage(),
       ),
     );
   }

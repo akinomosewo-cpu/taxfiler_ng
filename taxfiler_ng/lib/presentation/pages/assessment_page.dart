@@ -3,11 +3,38 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
+import '../../domain/entities/tax_entities.dart';
 import '../../domain/usecases/pdf_generator.dart';
 import '../blocs/tax_bloc.dart';
 
-class AssessmentPage extends StatelessWidget {
+class AssessmentPage extends StatefulWidget {
   const AssessmentPage({super.key});
+
+  @override
+  State<AssessmentPage> createState() => _AssessmentPageState();
+}
+
+class _AssessmentPageState extends State<AssessmentPage> {
+  bool _printing = false;
+  bool _downloading = false;
+
+  Future<void> _print(TaxAssessment assessment) async {
+    setState(() => _printing = true);
+    try {
+      await PdfGenerator.printAssessment(assessment);
+    } finally {
+      if (mounted) setState(() => _printing = false);
+    }
+  }
+
+  Future<void> _download(TaxAssessment assessment) async {
+    setState(() => _downloading = true);
+    try {
+      await PdfGenerator.shareAssessment(assessment);
+    } finally {
+      if (mounted) setState(() => _downloading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +48,19 @@ class AssessmentPage extends StatelessWidget {
           Builder(builder: (ctx) {
             final s = ctx.watch<TaxBloc>().state;
             final assessment = s is TaxLoaded ? s.assessment : null;
+            if (_printing) {
+              return const Padding(
+                padding: EdgeInsets.all(14),
+                child: SizedBox(
+                  height: 18,
+                  width: 18,
+                  child: CircularProgressIndicator(strokeWidth: 2.2, color: AppColors.primary),
+                ),
+              );
+            }
             return IconButton(
               icon: const Icon(Icons.picture_as_pdf_outlined, color: AppColors.primary),
-              onPressed: assessment == null ? null : () => PdfGenerator.printAssessment(assessment),
+              onPressed: assessment == null ? null : () => _print(assessment),
             );
           }),
         ],
@@ -141,9 +178,15 @@ class AssessmentPage extends StatelessWidget {
 
                 const Gap(24),
                 ElevatedButton.icon(
-                  onPressed: () => PdfGenerator.shareAssessment(a),
-                  icon: const Icon(Icons.download_rounded),
-                  label: const Text('Download PDF Assessment'),
+                  onPressed: _downloading ? null : () => _download(a),
+                  icon: _downloading
+                      ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2.2, color: Colors.white),
+                        )
+                      : const Icon(Icons.download_rounded),
+                  label: Text(_downloading ? 'Preparing PDF…' : 'Download PDF Assessment'),
                 ),
                 const Gap(32),
               ],

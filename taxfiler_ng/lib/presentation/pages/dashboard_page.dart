@@ -5,11 +5,14 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/app_constants.dart';
+import '../../data/auth/auth_repository.dart';
 import '../blocs/tax_bloc.dart';
+import '../widgets/page_transitions.dart';
 import 'income_page.dart';
 import 'expenses_page.dart';
 import 'assessment_page.dart';
 import 'connect_accounts_page.dart';
+import 'login_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -102,6 +105,11 @@ class _Content extends StatelessWidget {
                 value: y,
                 child: Text(y.label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
               )).toList(),
+            ),
+            IconButton(
+              icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondary),
+              tooltip: 'Log Out',
+              onPressed: () => _confirmLogout(context),
             ),
           ],
         ),
@@ -240,6 +248,35 @@ class _Content extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<void> _confirmLogout(BuildContext context) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text('Log Out?', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
+      content: Text(
+        'Your data stays saved on this device. You can log back in any time.',
+        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Log Out')),
+      ],
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  await AuthRepository().logOut();
+  if (!context.mounted) return;
+
+  Navigator.of(context).pushAndRemoveUntil(
+    FadeSlidePageRoute(builder: (_) => const LoginPage()),
+    (route) => false,
+  );
 }
 
 class _SummaryCard extends StatelessWidget {
