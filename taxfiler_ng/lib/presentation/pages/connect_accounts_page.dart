@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:uuid/uuid.dart';
+import '../../core/constants/app_constants.dart';
 import '../../core/theme/app_theme.dart';
 import '../../domain/entities/tax_entities.dart';
 import '../blocs/tax_bloc.dart';
@@ -78,7 +79,7 @@ class _ConnectAccountsPageState extends State<ConnectAccountsPage> {
   }
 
   void _importSampleIncome(String provider) {
-    final uuid = const Uuid();
+    const uuid = Uuid();
     context.read<TaxBloc>().add(IncomeAdded(IncomeEntry(
           id: uuid.v4(),
           description: '$provider payout',
@@ -114,14 +115,14 @@ class _ProviderTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: connected ? AppColors.primary.withOpacity(0.5) : AppColors.border),
+        border: Border.all(color: connected ? AppColors.primary.withValues(alpha: 0.5) : AppColors.border),
       ),
       child: Row(
         children: [
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: AppColors.primary.withOpacity(0.12),
+              color: AppColors.primary.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Icon(icon, color: AppColors.primary, size: 20),

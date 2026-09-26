@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -17,7 +19,7 @@ class PdfGenerator {
     await Printing.layoutPdf(onLayout: (_) async => bytes);
   }
 
-  static Future<List<int>> _buildDocument(TaxAssessment a, {String? taxpayerName}) async {
+  static Future<Uint8List> _buildDocument(TaxAssessment a, {String? taxpayerName}) async {
     final fmt = NumberFormat('#,##0.00', 'en_NG');
     final doc = pw.Document();
 
@@ -57,7 +59,7 @@ class PdfGenerator {
           pw.Header(level: 1, text: 'Tax Computation'),
           row('Taxable Income', '₦${fmt.format(a.taxableIncome)}', bold: true),
           pw.SizedBox(height: 8),
-          pw.Table.fromTextArray(
+          pw.TableHelper.fromTextArray(
             headers: ['Band', 'Rate', 'Taxable Amount', 'Tax'],
             data: a.bandBreakdown
                 .map((b) => [

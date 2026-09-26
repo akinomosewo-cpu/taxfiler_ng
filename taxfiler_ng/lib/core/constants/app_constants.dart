@@ -90,12 +90,14 @@ enum FilingStatus {
 }
 
 enum TaxYear {
-  y2024('2024', DateTime(2024, 1, 1), DateTime(2024, 12, 31)),
-  y2025('2025', DateTime(2025, 1, 1), DateTime(2025, 12, 31)),
-  y2026('2026', DateTime(2026, 1, 1), DateTime(2026, 12, 31));
+  y2024('2024', 2024),
+  y2025('2025', 2025),
+  y2026('2026', 2026);
 
-  const TaxYear(this.label, this.start, this.end);
+  const TaxYear(this.label, this.yearNumber);
   final String label;
-  final DateTime start;
-  final DateTime end;
+  final int yearNumber;
+
+  DateTime get start => DateTime(yearNumber, 1, 1);
+  DateTime get end => DateTime(yearNumber, 12, 31);
 }

@@ -65,7 +65,7 @@ class IncomePage extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
                   decoration: BoxDecoration(
-                    color: AppColors.danger.withOpacity(0.2),
+                    color: AppColors.danger.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.delete_outline_rounded, color: AppColors.danger),
@@ -83,7 +83,7 @@ class IncomePage extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: AppColors.success.withOpacity(0.12),
+                          color: AppColors.success.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(Icons.trending_up_rounded, color: AppColors.success, size: 16),
@@ -184,7 +184,7 @@ class _AddIncomeSheetState extends State<_AddIncomeSheet> {
           ),
           const Gap(12),
           DropdownButtonFormField<IncomeType>(
-            value: _type,
+            initialValue: _type,
             dropdownColor: AppColors.surfaceElevated,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
             decoration: const InputDecoration(hintText: 'Income type'),

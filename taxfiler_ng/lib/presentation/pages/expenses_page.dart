@@ -60,7 +60,7 @@ class ExpensesPage extends StatelessWidget {
                 background: Container(
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
-                  decoration: BoxDecoration(color: AppColors.danger.withOpacity(0.2), borderRadius: BorderRadius.circular(12)),
+                  decoration: BoxDecoration(color: AppColors.danger.withValues(alpha: 0.2), borderRadius: BorderRadius.circular(12)),
                   child: const Icon(Icons.delete_outline_rounded, color: AppColors.danger),
                 ),
                 onDismissed: (_) => context.read<TaxBloc>().add(ExpenseDeleted(e.id)),
@@ -71,7 +71,7 @@ class ExpensesPage extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(color: AppColors.warning.withOpacity(0.12), borderRadius: BorderRadius.circular(8)),
+                        decoration: BoxDecoration(color: AppColors.warning.withValues(alpha: 0.12), borderRadius: BorderRadius.circular(8)),
                         child: const Icon(Icons.receipt_long_outlined, color: AppColors.warning, size: 16),
                       ),
                       const Gap(12),
@@ -143,7 +143,7 @@ class _AddExpenseSheetState extends State<_AddExpenseSheet> {
           ),
           const Gap(12),
           DropdownButtonFormField<ExpenseType>(
-            value: _type,
+            initialValue: _type,
             dropdownColor: AppColors.surfaceElevated,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
             decoration: const InputDecoration(hintText: 'Expense type'),

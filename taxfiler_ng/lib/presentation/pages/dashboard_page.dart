@@ -129,11 +129,11 @@ class _Content extends StatelessWidget {
                         Text('Filing Deadline: 31 March ${now.year + 1}',
                             style: AppTextStyles.headlineSmall.copyWith(color: Colors.white)),
                         Text('$daysLeft days remaining',
-                            style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withOpacity(0.8))),
+                            style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.8))),
                       ],
                     ),
                   ),
-                  Text('⚠', style: TextStyle(fontSize: 20)),
+                  const Text('⚠', style: TextStyle(fontSize: 20)),
                 ],
               ),
             ).animate().fadeIn(),
@@ -262,7 +262,7 @@ class _SummaryCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(7),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
+                    color: color.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(icon, color: color, size: 15),
@@ -302,7 +302,7 @@ class _DeductionToggle extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: value ? AppColors.primary.withOpacity(0.4) : AppColors.border),
+        border: Border.all(color: value ? AppColors.primary.withValues(alpha: 0.4) : AppColors.border),
       ),
       child: Row(
         children: [
@@ -317,7 +317,7 @@ class _DeductionToggle extends StatelessWidget {
           ),
           Switch(
             value: value,
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
             onChanged: (v) => context.read<TaxBloc>().add(DeductionToggled(key_, v)),
           ),
         ],
