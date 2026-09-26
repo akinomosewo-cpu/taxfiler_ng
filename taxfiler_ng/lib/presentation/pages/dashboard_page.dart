@@ -9,6 +9,7 @@ import '../blocs/tax_bloc.dart';
 import 'income_page.dart';
 import 'expenses_page.dart';
 import 'assessment_page.dart';
+import 'connect_accounts_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -77,6 +78,13 @@ class _Content extends StatelessWidget {
             ],
           ),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.link_rounded, color: AppColors.textSecondary),
+              tooltip: 'Connect Accounts',
+              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                builder: (_) => BlocProvider.value(value: context.read<TaxBloc>(), child: const ConnectAccountsPage()),
+              )),
+            ),
             // Year selector
             PopupMenuButton<TaxYear>(
               color: AppColors.surface,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
+import '../../domain/usecases/pdf_generator.dart';
 import '../blocs/tax_bloc.dart';
 
 class AssessmentPage extends StatelessWidget {
@@ -17,7 +18,14 @@ class AssessmentPage extends StatelessWidget {
         title: Text('Tax Assessment', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
         backgroundColor: AppColors.background,
         actions: [
-          IconButton(icon: const Icon(Icons.picture_as_pdf_outlined, color: AppColors.primary), onPressed: () {}),
+          Builder(builder: (ctx) {
+            final s = ctx.watch<TaxBloc>().state;
+            final assessment = s is TaxLoaded ? s.assessment : null;
+            return IconButton(
+              icon: const Icon(Icons.picture_as_pdf_outlined, color: AppColors.primary),
+              onPressed: assessment == null ? null : () => PdfGenerator.printAssessment(assessment),
+            );
+          }),
         ],
       ),
       body: BlocBuilder<TaxBloc, TaxState>(
@@ -110,7 +118,7 @@ class AssessmentPage extends StatelessWidget {
 
                 const Gap(24),
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () => PdfGenerator.shareAssessment(a),
                   icon: const Icon(Icons.download_rounded),
                   label: const Text('Download PDF Assessment'),
                 ),
