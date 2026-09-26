@@ -22,7 +22,7 @@ class TaxCalculator {
     final nhiDeduction = hasNhi ? netIncome * AppConstants.nhiRate : 0.0;
 
     // Consolidated Relief Allowance: higher of ₦200,000 or 1% of gross income
-    final craBase = AppConstants.consolidatedReliefAllowance;
+    const craBase = AppConstants.consolidatedReliefAllowance;
     final craPercent = grossIncome * AppConstants.consolidatedReliefPercent;
     final consolidatedRelief = (craBase > craPercent ? craBase : craPercent) + (grossIncome * 0.20);
 

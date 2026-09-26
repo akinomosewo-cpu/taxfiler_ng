@@ -81,6 +81,7 @@ class TaxLoaded extends TaxState {
     List<IncomeEntry>? incomes,
     List<ExpenseEntry>? expenses,
     TaxAssessment? assessment,
+    bool clearAssessment = false,
     bool? hasPension,
     bool? hasNhf,
     bool? hasNhi,
@@ -88,7 +89,7 @@ class TaxLoaded extends TaxState {
     selectedYear: selectedYear ?? this.selectedYear,
     incomes: incomes ?? this.incomes,
     expenses: expenses ?? this.expenses,
-    assessment: assessment ?? this.assessment,
+    assessment: clearAssessment ? null : (assessment ?? this.assessment),
     hasPension: hasPension ?? this.hasPension,
     hasNhf: hasNhf ?? this.hasNhf,
     hasNhi: hasNhi ?? this.hasNhi,
@@ -124,35 +125,35 @@ class TaxBloc extends Bloc<TaxEvent, TaxState> {
 
   void _onYearChanged(TaxYearChanged e, Emitter<TaxState> emit) {
     if (state is TaxLoaded) {
-      emit((state as TaxLoaded).copyWith(selectedYear: e.year, incomes: [], expenses: [], assessment: null));
+      emit((state as TaxLoaded).copyWith(selectedYear: e.year, incomes: [], expenses: [], clearAssessment: true));
     }
   }
 
   void _onIncomeAdded(IncomeAdded e, Emitter<TaxState> emit) {
     if (state is TaxLoaded) {
       final s = state as TaxLoaded;
-      emit(s.copyWith(incomes: [...s.incomes, e.entry], assessment: null));
+      emit(s.copyWith(incomes: [...s.incomes, e.entry], clearAssessment: true));
     }
   }
 
   void _onIncomeDeleted(IncomeDeleted e, Emitter<TaxState> emit) {
     if (state is TaxLoaded) {
       final s = state as TaxLoaded;
-      emit(s.copyWith(incomes: s.incomes.where((i) => i.id != e.id).toList(), assessment: null));
+      emit(s.copyWith(incomes: s.incomes.where((i) => i.id != e.id).toList(), clearAssessment: true));
     }
   }
 
   void _onExpenseAdded(ExpenseAdded e, Emitter<TaxState> emit) {
     if (state is TaxLoaded) {
       final s = state as TaxLoaded;
-      emit(s.copyWith(expenses: [...s.expenses, e.entry], assessment: null));
+      emit(s.copyWith(expenses: [...s.expenses, e.entry], clearAssessment: true));
     }
   }
 
   void _onExpenseDeleted(ExpenseDeleted e, Emitter<TaxState> emit) {
     if (state is TaxLoaded) {
       final s = state as TaxLoaded;
-      emit(s.copyWith(expenses: s.expenses.where((i) => i.id != e.id).toList(), assessment: null));
+      emit(s.copyWith(expenses: s.expenses.where((i) => i.id != e.id).toList(), clearAssessment: true));
     }
   }
 
@@ -179,7 +180,7 @@ class TaxBloc extends Bloc<TaxEvent, TaxState> {
         hasPension: e.key == 'pension' ? e.value : s.hasPension,
         hasNhf: e.key == 'nhf' ? e.value : s.hasNhf,
         hasNhi: e.key == 'nhi' ? e.value : s.hasNhi,
-        assessment: null,
+        clearAssessment: true,
       ));
     }
   }

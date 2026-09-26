@@ -2,66 +2,85 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Warm, soft, light-first palette. A single vibrant brand accent (green)
+/// is used sparingly against off-white/pastel surfaces, with generous
+/// rounding and soft shadows rather than flat borders.
 class AppColors {
   AppColors._();
 
-  static const Color primary = Color(0xFF00C896);
-  static const Color primaryDark = Color(0xFF00A07A);
-  static const Color primaryLight = Color(0xFF33D4A8);
+  static const Color primary = Color(0xFF12A870);
+  static const Color primaryDark = Color(0xFF0C8A5B);
+  static const Color primaryLight = Color(0xFF5CD9A8);
 
-  static const Color accent = Color(0xFF5E5CE6);
+  static const Color accent = Color(0xFF6C5CE6);
 
-  static const Color success = Color(0xFF30D158);
-  static const Color warning = Color(0xFFFFD60A);
-  static const Color danger = Color(0xFFFF453A);
-  static const Color info = Color(0xFF64D2FF);
+  static const Color success = Color(0xFF2FB673);
+  static const Color warning = Color(0xFFF5A623);
+  static const Color danger = Color(0xFFE8544E);
+  static const Color info = Color(0xFF3FA9F5);
 
-  static const Color background = Color(0xFF0C0C0E);
-  static const Color surface = Color(0xFF1C1C1E);
-  static const Color surfaceElevated = Color(0xFF2C2C2E);
-  static const Color surfaceHighest = Color(0xFF3A3A3C);
+  // Soft off-white / pastel canvas.
+  static const Color background = Color(0xFFF7F3EC);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color surfaceElevated = Color(0xFFFDFBF7);
+  static const Color surfaceHighest = Color(0xFFF0EAE0);
 
-  static const Color textPrimary = Color(0xFFFFFFFF);
-  static const Color textSecondary = Color(0xFF8E8E93);
-  static const Color textTertiary = Color(0xFF48484A);
+  static const Color textPrimary = Color(0xFF231F1A);
+  static const Color textSecondary = Color(0xFF847C70);
+  static const Color textTertiary = Color(0xFFB8AFA1);
 
-  static const Color border = Color(0xFF38383A);
+  static const Color border = Color(0xFFEDE6D8);
 
   static const LinearGradient primaryGradient = LinearGradient(
-    colors: [Color(0xFF00C896), Color(0xFF00A0C4)],
+    colors: [Color(0xFF12A870), Color(0xFF0C8AAE)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient dangerGradient = LinearGradient(
-    colors: [Color(0xFFFF453A), Color(0xFFFF6961)],
+    colors: [Color(0xFFE8544E), Color(0xFFF08A5B)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
 
   static const LinearGradient cardGradient = LinearGradient(
-    colors: [Color(0xFF1C1C1E), Color(0xFF2C2C2E)],
+    colors: [Color(0xFFFFFFFF), Color(0xFFF7F3EC)],
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
   );
+
+  /// Soft, low-contrast card shadow to replace flat borders.
+  static List<BoxShadow> get cardShadow => [
+        BoxShadow(
+          color: const Color(0xFF231F1A).withValues(alpha: 0.06),
+          blurRadius: 24,
+          offset: const Offset(0, 10),
+          spreadRadius: -6,
+        ),
+        BoxShadow(
+          color: const Color(0xFF231F1A).withValues(alpha: 0.04),
+          blurRadius: 6,
+          offset: const Offset(0, 2),
+        ),
+      ];
 }
 
 class AppTextStyles {
   AppTextStyles._();
 
-  static TextStyle get displayLarge => GoogleFonts.inter(fontSize: 34, fontWeight: FontWeight.w700, letterSpacing: -0.5, height: 1.2);
-  static TextStyle get displayMedium => GoogleFonts.inter(fontSize: 28, fontWeight: FontWeight.w700, letterSpacing: -0.3, height: 1.25);
-  static TextStyle get displaySmall => GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w600, letterSpacing: -0.2, height: 1.3);
-  static TextStyle get headlineLarge => GoogleFonts.inter(fontSize: 20, fontWeight: FontWeight.w600, letterSpacing: -0.1, height: 1.35);
-  static TextStyle get headlineMedium => GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w600, height: 1.4);
+  static TextStyle get displayLarge => GoogleFonts.inter(fontSize: 40, fontWeight: FontWeight.w800, letterSpacing: -0.8, height: 1.1);
+  static TextStyle get displayMedium => GoogleFonts.inter(fontSize: 32, fontWeight: FontWeight.w800, letterSpacing: -0.6, height: 1.15);
+  static TextStyle get displaySmall => GoogleFonts.inter(fontSize: 26, fontWeight: FontWeight.w700, letterSpacing: -0.3, height: 1.2);
+  static TextStyle get headlineLarge => GoogleFonts.inter(fontSize: 22, fontWeight: FontWeight.w700, letterSpacing: -0.2, height: 1.3);
+  static TextStyle get headlineMedium => GoogleFonts.inter(fontSize: 18, fontWeight: FontWeight.w700, height: 1.35);
   static TextStyle get headlineSmall => GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w600, height: 1.4);
   static TextStyle get bodyLarge => GoogleFonts.inter(fontSize: 17, fontWeight: FontWeight.w400, height: 1.5);
   static TextStyle get bodyMedium => GoogleFonts.inter(fontSize: 15, fontWeight: FontWeight.w400, height: 1.5);
   static TextStyle get bodySmall => GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w400, height: 1.5);
-  static TextStyle get labelLarge => GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w500, letterSpacing: 0.1, height: 1.4);
-  static TextStyle get labelMedium => GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w500, letterSpacing: 0.1, height: 1.4);
-  static TextStyle get labelSmall => GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w500, letterSpacing: 0.5, height: 1.4);
-  static TextStyle get monoLarge => GoogleFonts.jetBrainsMono(fontSize: 32, fontWeight: FontWeight.w700, letterSpacing: -1);
+  static TextStyle get labelLarge => GoogleFonts.inter(fontSize: 13, fontWeight: FontWeight.w600, letterSpacing: 0.1, height: 1.4);
+  static TextStyle get labelMedium => GoogleFonts.inter(fontSize: 12, fontWeight: FontWeight.w600, letterSpacing: 0.1, height: 1.4);
+  static TextStyle get labelSmall => GoogleFonts.inter(fontSize: 11, fontWeight: FontWeight.w600, letterSpacing: 0.4, height: 1.4);
+  static TextStyle get monoLarge => GoogleFonts.jetBrainsMono(fontSize: 36, fontWeight: FontWeight.w700, letterSpacing: -1);
 }
 
 class AppTheme {
@@ -69,9 +88,9 @@ class AppTheme {
 
   static ThemeData get dark => ThemeData(
         useMaterial3: true,
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
         scaffoldBackgroundColor: AppColors.background,
-        colorScheme: const ColorScheme.dark(
+        colorScheme: const ColorScheme.light(
           primary: AppColors.primary,
           secondary: AppColors.accent,
           surface: AppColors.surface,
@@ -84,14 +103,14 @@ class AppTheme {
           elevation: 0,
           scrolledUnderElevation: 0,
           centerTitle: true,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
           titleTextStyle: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary),
           iconTheme: const IconThemeData(color: AppColors.textPrimary),
         ),
-        cardTheme: CardTheme(
+        cardTheme: CardThemeData(
           color: AppColors.surface,
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
           margin: EdgeInsets.zero,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
@@ -99,21 +118,21 @@ class AppTheme {
             backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             elevation: 0,
-            minimumSize: const Size(double.infinity, 56),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+            minimumSize: const Size(double.infinity, 58),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
             textStyle: AppTextStyles.headlineSmall,
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.surface,
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
-          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.border)),
-          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: AppColors.primary, width: 2)),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide.none),
+          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: const BorderSide(color: AppColors.primary, width: 2)),
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
           hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
         ),
-        dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 0.5),
+        dividerTheme: const DividerThemeData(color: AppColors.border, thickness: 1),
         textTheme: TextTheme(
           displayLarge: AppTextStyles.displayLarge.copyWith(color: AppColors.textPrimary),
           displayMedium: AppTextStyles.displayMedium.copyWith(color: AppColors.textPrimary),
@@ -128,4 +147,35 @@ class AppTheme {
           labelSmall: AppTextStyles.labelSmall.copyWith(color: AppColors.textSecondary),
         ),
       );
+}
+
+/// A small, colorful pill used for statuses and categories — matches the
+/// soft, semantic accent-chip language used across the app.
+class AppChip extends StatelessWidget {
+  final String label;
+  final Color color;
+  final IconData? icon;
+
+  const AppChip({super.key, required this.label, required this.color, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.14),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, color: color, size: 13),
+            const SizedBox(width: 5),
+          ],
+          Text(label, style: AppTextStyles.labelSmall.copyWith(color: color)),
+        ],
+      ),
+    );
+  }
 }

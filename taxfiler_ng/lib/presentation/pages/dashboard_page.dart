@@ -5,10 +5,14 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import '../../core/theme/app_theme.dart';
 import '../../core/constants/app_constants.dart';
+import '../../data/auth/auth_repository.dart';
 import '../blocs/tax_bloc.dart';
+import '../widgets/page_transitions.dart';
 import 'income_page.dart';
 import 'expenses_page.dart';
 import 'assessment_page.dart';
+import 'connect_accounts_page.dart';
+import 'login_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
@@ -65,10 +69,10 @@ class _Content extends StatelessWidget {
           title: Row(
             children: [
               Container(
-                width: 32, height: 32,
+                width: 34, height: 34,
                 decoration: BoxDecoration(
                   gradient: AppColors.primaryGradient,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.receipt_long_rounded, color: Colors.white, size: 18),
               ),
@@ -77,6 +81,13 @@ class _Content extends StatelessWidget {
             ],
           ),
           actions: [
+            IconButton(
+              icon: const Icon(Icons.link_rounded, color: AppColors.textSecondary),
+              tooltip: 'Connect Accounts',
+              onPressed: () => Navigator.push(context, MaterialPageRoute(
+                builder: (_) => BlocProvider.value(value: context.read<TaxBloc>(), child: const ConnectAccountsPage()),
+              )),
+            ),
             // Year selector
             PopupMenuButton<TaxYear>(
               color: AppColors.surface,
@@ -95,6 +106,11 @@ class _Content extends StatelessWidget {
                 child: Text(y.label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
               )).toList(),
             ),
+            IconButton(
+              icon: const Icon(Icons.logout_rounded, color: AppColors.textSecondary),
+              tooltip: 'Log Out',
+              onPressed: () => _confirmLogout(context),
+            ),
           ],
         ),
 
@@ -105,32 +121,49 @@ class _Content extends StatelessWidget {
 
             // Deadline banner
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
                 gradient: daysLeft < 60 ? AppColors.dangerGradient : AppColors.primaryGradient,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: (daysLeft < 60 ? AppColors.danger : AppColors.primary).withValues(alpha: 0.28),
+                    blurRadius: 24,
+                    offset: const Offset(0, 12),
+                    spreadRadius: -8,
+                  ),
+                ],
               ),
               child: Row(
                 children: [
-                  const Icon(Icons.calendar_today_rounded, color: Colors.white, size: 20),
-                  const Gap(12),
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.18),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(Icons.calendar_today_rounded, color: Colors.white, size: 20),
+                  ),
+                  const Gap(14),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('Filing Deadline: 31 March ${now.year + 1}',
-                            style: AppTextStyles.headlineSmall.copyWith(color: Colors.white)),
+                            style: AppTextStyles.headlineSmall.copyWith(color: Colors.white, fontWeight: FontWeight.w700)),
+                        const Gap(2),
                         Text('$daysLeft days remaining',
-                            style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withOpacity(0.8))),
+                            style: AppTextStyles.bodySmall.copyWith(color: Colors.white.withValues(alpha: 0.85))),
                       ],
                     ),
                   ),
-                  Text('⚠', style: TextStyle(fontSize: 20)),
+                  const Gap(8),
+                  const Text('⚠', style: TextStyle(fontSize: 22)),
                 ],
               ),
             ).animate().fadeIn(),
 
-            const Gap(20),
+            const Gap(24),
 
             // Income / Expense / Tax cards
             Row(children: [
@@ -151,7 +184,7 @@ class _Content extends StatelessWidget {
               ).animate(delay: 100.ms).fadeIn().slideY(begin: 0.1)),
             ]),
 
-            const Gap(12),
+            const Gap(16),
 
             _SummaryCard(
               label: 'Estimated Tax Liability',
@@ -166,18 +199,18 @@ class _Content extends StatelessWidget {
                   : null,
             ).animate(delay: 150.ms).fadeIn().slideY(begin: 0.1),
 
-            const Gap(20),
+            const Gap(28),
 
             // Deductions
-            Text('Statutory Deductions', style: AppTextStyles.headlineSmall.copyWith(color: AppColors.textPrimary)),
-            const Gap(12),
+            Text('Statutory Deductions', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
+            const Gap(14),
             _DeductionToggle(label: 'Pension (8%)', subtitle: 'NSITF / RSA Pension Fund', key_: 'pension', value: state.hasPension),
-            const Gap(8),
+            const Gap(10),
             _DeductionToggle(label: 'NHF (2.5%)', subtitle: 'National Housing Fund', key_: 'nhf', value: state.hasNhf),
-            const Gap(8),
+            const Gap(10),
             _DeductionToggle(label: 'NHI (5%)', subtitle: 'National Health Insurance', key_: 'nhi', value: state.hasNhi),
 
-            const Gap(24),
+            const Gap(28),
 
             // Calculate button
             ElevatedButton.icon(
@@ -217,6 +250,35 @@ class _Content extends StatelessWidget {
   }
 }
 
+Future<void> _confirmLogout(BuildContext context) async {
+  final confirmed = await showDialog<bool>(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      backgroundColor: AppColors.surface,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      title: Text('Log Out?', style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
+      content: Text(
+        'Your data stays saved on this device. You can log back in any time.',
+        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+      ),
+      actions: [
+        TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancel')),
+        TextButton(onPressed: () => Navigator.pop(ctx, true), child: const Text('Log Out')),
+      ],
+    ),
+  );
+
+  if (confirmed != true || !context.mounted) return;
+
+  await AuthRepository().logOut();
+  if (!context.mounted) return;
+
+  Navigator.of(context).pushAndRemoveUntil(
+    FadeSlidePageRoute(builder: (_) => const LoginPage()),
+    (route) => false,
+  );
+}
+
 class _SummaryCard extends StatelessWidget {
   final String label;
   final String value;
@@ -239,11 +301,11 @@ class _SummaryCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: AppColors.surface,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.border),
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: AppColors.cardShadow,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -252,20 +314,24 @@ class _SummaryCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: const EdgeInsets.all(7),
+                  padding: const EdgeInsets.all(9),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.12),
-                    borderRadius: BorderRadius.circular(8),
+                    color: color.withValues(alpha: 0.14),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(icon, color: color, size: 15),
+                  child: Icon(icon, color: color, size: 17),
                 ),
                 if (onTap != null)
                   const Icon(Icons.chevron_right_rounded, color: AppColors.textTertiary, size: 18),
               ],
             ),
-            const Gap(12),
-            Text(value, style: AppTextStyles.headlineMedium.copyWith(color: AppColors.textPrimary)),
-            const Gap(4),
+            const Gap(16),
+            Text(
+              value,
+              style: (fullWidth ? AppTextStyles.displaySmall : AppTextStyles.headlineLarge)
+                  .copyWith(color: AppColors.textPrimary),
+            ),
+            const Gap(6),
             Text(label, style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
           ],
         ),
@@ -290,26 +356,37 @@ class _DeductionToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: value ? AppColors.primary.withOpacity(0.4) : AppColors.border),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: AppColors.cardShadow,
       ),
       child: Row(
         children: [
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary)),
-                Text(subtitle, style: AppTextStyles.labelSmall.copyWith(color: AppColors.textSecondary)),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(label, style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary, fontWeight: FontWeight.w600)),
+                      const Gap(2),
+                      Text(subtitle, style: AppTextStyles.labelSmall.copyWith(color: AppColors.textSecondary)),
+                    ],
+                  ),
+                ),
+                if (value) ...[
+                  const AppChip(label: 'Active', color: AppColors.success, icon: Icons.check_rounded),
+                  const Gap(10),
+                ],
               ],
             ),
           ),
           Switch(
             value: value,
-            activeColor: AppColors.primary,
+            activeThumbColor: AppColors.primary,
             onChanged: (v) => context.read<TaxBloc>().add(DeductionToggled(key_, v)),
           ),
         ],
